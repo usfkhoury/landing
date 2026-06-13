@@ -3,17 +3,38 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Youssef El Khoury</title>
+  <meta name="color-scheme" content="dark" />
+  <meta name="theme-color" content="#0f1117" />
+
+  <title>Youssef El Khoury — Lebanese DIY: cooking & the olive grove</title>
+  <meta name="description" content="Youssef El Khoury's home on the web — a recipe blog on Lebanese home cooking and a tracker for the family olive grove's harvests, oil, and seasonal calendar." />
+  <link rel="canonical" href="https://usfkhoury.com/" />
+
+  <!-- Open Graph / social -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://usfkhoury.com/" />
+  <meta property="og:title" content="Youssef El Khoury" />
+  <meta property="og:description" content="A recipe blog on Lebanese home cooking and a tracker for the family olive grove — exploring the tradition of doing things yourself." />
+  <!-- TODO: add a 1200x630 og:image (og.png) and a matching twitter:image, then
+       switch twitter:card to summary_large_image. Omitted for now to avoid a broken link. -->
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Youssef El Khoury" />
+  <meta name="twitter:description" content="A recipe blog on Lebanese home cooking and a tracker for the family olive grove." />
+
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🫒</text></svg>" />
+
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
       --bg:      #0f1117;
-      --surface: #1a1d27;
+      --surface: #161922;
+      --surface-2: #1c2030;
       --border:  #2a2d3a;
       --text:    #e8eaf0;
       --muted:   #8890a4;
-      --accent:  #c9a227;
+      --gold:    #c9a227;
+      --olive:   #8aa24a;
     }
 
     body {
@@ -21,123 +42,181 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      background: var(--bg);
       color: var(--text);
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      padding: 2rem 1.25rem;
+      padding: 2.5rem 1.25rem;
+      /* Layered olive-tinted glow over a near-black base, so it isn't a flat slab. */
+      background:
+        radial-gradient(70% 55% at 50% -5%, rgba(138, 162, 74, 0.10), transparent 60%),
+        radial-gradient(60% 45% at 50% 105%, rgba(201, 162, 39, 0.06), transparent 60%),
+        var(--bg);
+      background-attachment: fixed;
     }
 
     main {
       width: 100%;
-      max-width: 420px;
+      max-width: 440px;
       text-align: center;
     }
 
+    .sprig { color: var(--olive); margin-bottom: 1rem; }
+
     .name {
-      font-size: clamp(1.75rem, 6vw, 2.5rem);
+      font-size: clamp(1.85rem, 6vw, 2.6rem);
       font-weight: 700;
       letter-spacing: -0.02em;
       color: var(--text);
     }
 
     .tagline {
-      margin-top: 0.75rem;
-      font-size: 0.95rem;
+      margin: 0.85rem auto 0;
+      max-width: 34ch;
+      font-size: 0.98rem;
       color: var(--muted);
-      line-height: 1.5;
+      line-height: 1.55;
     }
 
     .divider {
-      margin: 2rem auto;
-      width: 40px;
+      margin: 1.85rem auto;
+      width: 44px;
       height: 2px;
-      background: var(--accent);
+      background: linear-gradient(90deg, var(--olive), var(--gold));
       border-radius: 2px;
     }
 
     .links {
       display: flex;
       flex-direction: column;
-      gap: 0.75rem;
+      gap: 0.85rem;
     }
 
     .link-card {
       display: flex;
       align-items: center;
-      gap: 0.875rem;
-      padding: 0.875rem 1.25rem;
+      gap: 1rem;
+      padding: 1.05rem 1.15rem;
       background: var(--surface);
       border: 1px solid var(--border);
-      border-radius: 10px;
+      border-radius: 14px;
       text-decoration: none;
       color: var(--text);
-      font-size: 0.95rem;
-      font-weight: 500;
-      transition: border-color 0.15s, background 0.15s;
+      text-align: left;
+      transition: transform 0.18s ease, border-color 0.18s ease,
+                  background 0.18s ease, box-shadow 0.18s ease;
     }
 
-    .link-card:hover {
-      border-color: var(--accent);
-      background: #21243200;
+    .link-card:hover,
+    .link-card:focus-visible {
+      transform: translateY(-2px);
+      border-color: var(--gold);
+      background: var(--surface-2);
+      box-shadow: 0 10px 24px -12px rgba(201, 162, 39, 0.35);
+      outline: none;
     }
 
     .link-card .icon {
-      font-size: 1.25rem;
       flex-shrink: 0;
+      width: 44px;
+      height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+      background: rgba(138, 162, 74, 0.10);
+      border: 1px solid var(--border);
+      border-radius: 11px;
     }
 
-    .link-card .label { flex: 1; text-align: left; }
+    .link-card .body { flex: 1; min-width: 0; }
+    .link-card .label { font-size: 1.02rem; font-weight: 600; }
+    .link-card .desc {
+      margin-top: 0.2rem;
+      font-size: 0.82rem;
+      color: var(--muted);
+      line-height: 1.45;
+    }
 
     .link-card .arrow {
       color: var(--muted);
-      font-size: 0.85rem;
-      transition: color 0.15s;
+      font-size: 1rem;
+      flex-shrink: 0;
+      transition: color 0.18s ease, transform 0.18s ease;
+    }
+    .link-card:hover .arrow,
+    .link-card:focus-visible .arrow {
+      color: var(--gold);
+      transform: translateX(3px);
     }
 
-    .link-card:hover .arrow { color: var(--accent); }
-
     .social {
-      margin-top: 2rem;
+      margin-top: 2.1rem;
       display: flex;
+      flex-wrap: wrap;
       justify-content: center;
-      gap: 1.25rem;
+      gap: 0.75rem 1.25rem;
     }
 
     .social a {
       color: var(--muted);
       text-decoration: none;
-      font-size: 0.82rem;
-      letter-spacing: 0.03em;
+      font-size: 0.8rem;
+      letter-spacing: 0.04em;
       text-transform: uppercase;
-      transition: color 0.15s;
+      transition: color 0.15s ease;
     }
-
-    .social a:hover { color: var(--accent); }
+    .social a:hover,
+    .social a:focus-visible { color: var(--gold); }
 
     .footer {
       margin-top: 2.5rem;
-      font-size: 0.75rem;
-      color: #3a3d4a;
+      font-size: 0.74rem;
+      color: #4a4e5e;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      * { transition: none !important; }
+      .link-card:hover, .link-card:focus-visible { transform: none; }
+      .link-card:hover .arrow, .link-card:focus-visible .arrow { transform: none; }
     }
   </style>
 </head>
 <body>
   <main>
+    <!-- Decorative olive sprig -->
+    <svg class="sprig" width="46" height="46" viewBox="0 0 48 48" fill="none"
+         stroke="currentColor" stroke-width="1.6" stroke-linecap="round"
+         aria-hidden="true" focusable="false">
+      <path d="M24 44 C24 30 24 18 24 8" />
+      <path d="M24 16 C18 14 13 16 10 21 C16 23 21 21 24 16 Z" fill="currentColor" fill-opacity="0.18" />
+      <path d="M24 24 C30 22 35 24 38 29 C32 31 27 29 24 24 Z" fill="currentColor" fill-opacity="0.18" />
+      <circle cx="20" cy="10" r="2.4" fill="currentColor" />
+      <circle cx="28" cy="13" r="2.4" fill="currentColor" />
+    </svg>
+
     <h1 class="name">Youssef El Khoury</h1>
-    <p class="tagline">Exploring and documenting the Lebanese tradition<br>of doing things yourself.</p>
+    <p class="tagline">
+      Exploring and documenting the Lebanese tradition of doing things yourself —
+      from the kitchen to the olive grove.
+    </p>
 
-    <div class="divider"></div>
+    <div class="divider" aria-hidden="true"></div>
 
-    <nav class="links">
+    <nav class="links" aria-label="Projects">
       <a class="link-card" href="https://blog.usfkhoury.com">
-        <span class="icon">✍️</span>
-        <span class="label">Blog</span>
-        <span class="arrow">→</span>
+        <span class="icon" aria-hidden="true">✍️</span>
+        <span class="body">
+          <span class="label">Blog</span>
+          <span class="desc">Recipes and field notes on Lebanese home cooking and doing things by hand — bread, sweets, and the techniques behind them.</span>
+        </span>
+        <span class="arrow" aria-hidden="true">→</span>
       </a>
       <a class="link-card" href="https://olives.usfkhoury.com">
-        <span class="icon">🫒</span>
-        <span class="label">Olive Grove Tracker</span>
-        <span class="arrow">→</span>
+        <span class="icon" aria-hidden="true">🫒</span>
+        <span class="body">
+          <span class="label">Olive Grove Tracker</span>
+          <span class="desc">A living record of our family olive grove — harvests, oil yield, and the seasonal farming calendar, year over year.</span>
+        </span>
+        <span class="arrow" aria-hidden="true">→</span>
       </a>
     </nav>
 
@@ -149,7 +228,7 @@
       <a href="mailto:usfkhouryy@gmail.com">Email</a>
     </div>
 
-    <p class="footer">usfkhoury.com</p>
+    <p class="footer">© 2026 usfkhoury.com</p>
   </main>
 </body>
 </html>
