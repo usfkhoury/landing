@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "landing",
+      "runtimeExecutable": "docker",
+      "runtimeArgs": ["run", "--rm", "-p", "3456:80", "-v", "./:/usr/share/nginx/html:ro", "nginx:alpine"],
+      "port": 3456
+    }
+  ]
+}
