@@ -4,8 +4,15 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="color-scheme" content="light dark" />
-  <meta name="theme-color" content="#f4eee3" media="(prefers-color-scheme: light)" />
-  <meta name="theme-color" content="#1a1711" media="(prefers-color-scheme: dark)" />
+  <meta name="theme-color" content="#f4eee3" />
+  <!-- Apply the saved theme (auto | light | dark) before first paint to avoid a flash. -->
+  <script>
+    (function () {
+      var m = 'auto';
+      try { m = localStorage.getItem('theme') || 'auto'; } catch (e) {}
+      document.documentElement.setAttribute('data-theme', m);
+    })();
+  </script>
 
   <title>Youssef El Khoury — Lebanese DIY: cooking & the olive grove</title>
   <meta name="description" content="Youssef El Khoury's home on the web — a recipe blog on Lebanese home cooking and a tracker for the family olive grove's harvests, oil, and seasonal calendar." />
@@ -34,7 +41,8 @@
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-    :root {
+    /* Light is the base palette (also when the user explicitly picks light). */
+    :root, :root[data-theme="light"] {
       --bg:        #f4eee3;
       --surface:   #fbf7ee;
       --text:      #2f2a22;
@@ -46,8 +54,22 @@
       --shadow:    20px 30px -24px rgba(58, 46, 30, 0.45);
     }
 
+    /* Warm-dark palette — when the user explicitly picks dark. */
+    :root[data-theme="dark"] {
+      --bg:        #1a1711;
+      --surface:   #241f17;
+      --text:      #ece4d5;
+      --muted:     #a89a83;
+      --line:      #332d22;
+      --olive:     #9aa765;
+      --olive-deep:#b3bd80;
+      --terracotta:#cf7a52;
+      --shadow:    20px 30px -24px rgba(0, 0, 0, 0.6);
+    }
+
+    /* ...and in auto mode (or no JS), follow the system when it prefers dark. */
     @media (prefers-color-scheme: dark) {
-      :root {
+      :root[data-theme="auto"], :root:not([data-theme]) {
         --bg:        #1a1711;
         --surface:   #241f17;
         --text:      #ece4d5;
@@ -221,6 +243,32 @@
 
     a:focus-visible { outline: 2px solid var(--olive); outline-offset: 3px; border-radius: 4px; }
 
+    /* ---------- theme toggle ---------- */
+    .theme-toggle {
+      position: fixed;
+      top: 1rem;
+      right: 1rem;
+      z-index: 10;
+      width: 38px;
+      height: 38px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      line-height: 1;
+      color: var(--muted);
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      cursor: pointer;
+      transition: color 0.18s ease, border-color 0.18s ease;
+    }
+    .theme-toggle:hover, .theme-toggle:focus-visible {
+      color: var(--terracotta);
+      border-color: var(--terracotta);
+      outline: none;
+    }
+
     /* ---------- entrance motion ---------- */
     .name, .rule, .tagline, .social, .card { animation: rise 0.6s ease-out both; }
     .name    { animation-delay: 0.15s; }
@@ -257,6 +305,8 @@
   </style>
 </head>
 <body>
+  <button id="theme-toggle" class="theme-toggle" type="button"
+          aria-label="Theme: auto (system)" title="Theme: auto (system)">◐</button>
   <main>
     <div class="wrap">
       <section class="identity">
@@ -310,5 +360,45 @@
   </main>
 
   <footer class="footer">© 2026 usfkhoury.com</footer>
+
+  <script>
+    // Theme control: cycles auto → light → dark. "auto" defers to the system
+    // (prefers-color-scheme); light/dark force a choice. Persisted in localStorage.
+    (function () {
+      var root = document.documentElement;
+      var btn = document.getElementById('theme-toggle');
+      var order = ['auto', 'light', 'dark'];
+      var icon = { auto: '◐', light: '☀︎', dark: '☾' };
+      var label = { auto: 'Theme: auto (system)', light: 'Theme: light', dark: 'Theme: dark' };
+      var darkMq = window.matchMedia('(prefers-color-scheme: dark)');
+
+      function resolved(mode) {
+        return mode === 'auto' ? (darkMq.matches ? 'dark' : 'light') : mode;
+      }
+      function apply(mode) {
+        root.setAttribute('data-theme', mode);
+        try { localStorage.setItem('theme', mode); } catch (e) {}
+        var r = resolved(mode);
+        root.style.colorScheme = r;
+        var meta = document.querySelector('meta[name="theme-color"]');
+        if (meta) meta.setAttribute('content', r === 'dark' ? '#1a1711' : '#f4eee3');
+        btn.textContent = icon[mode];
+        btn.setAttribute('aria-label', label[mode]);
+        btn.title = label[mode];
+      }
+
+      apply(root.getAttribute('data-theme') || 'auto');
+
+      btn.addEventListener('click', function () {
+        var cur = root.getAttribute('data-theme') || 'auto';
+        apply(order[(order.indexOf(cur) + 1) % order.length]);
+      });
+
+      // Keep chrome color / color-scheme correct when the system flips in auto mode.
+      darkMq.addEventListener('change', function () {
+        if ((root.getAttribute('data-theme') || 'auto') === 'auto') apply('auto');
+      });
+    })();
+  </script>
 </body>
 </html>
