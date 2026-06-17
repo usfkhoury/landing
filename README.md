@@ -20,6 +20,15 @@ Three modes cycled by the `◐` button (top-right corner):
 
 Choice is persisted to `localStorage`. A no-flash script in `<head>` applies the saved theme before first paint.
 
+## Easter egg
+
+A hidden video tribute lives in the page. It opens a soft overlay when a visitor
+either **types `gaelle`** (desktop) or **taps the olive sprig 3×** (touch + desktop),
+dismissed with Esc or a backdrop click. The clip is self-hosted at
+**`assets/gaelle.mp4`** ([why](docs/adr/0001-self-hosted-tribute-video.md)) — until
+that file exists, a placeholder note shows instead. See [`assets/README.md`](assets/README.md)
+for encoding guidance. Edit the caption in the `#tribute` block of `index.html`.
+
 ## Editing
 
 Open `index.html`. Everything — markup, styles, scripts — lives in that one file.

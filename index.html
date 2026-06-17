@@ -296,11 +296,126 @@
       .projects { justify-self: end; max-width: 360px; }
     }
 
+    /* ---------- tribute easter egg (for Gaelle) ---------- */
+    .tribute {
+      position: fixed;
+      inset: 0;
+      z-index: 50;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+      background: color-mix(in srgb, var(--bg) 72%, #000);
+      backdrop-filter: blur(2px);
+    }
+    .tribute.open { display: flex; animation: fade 0.35s ease-out both; }
+
+    .tribute-card {
+      position: relative;
+      width: 100%;
+      max-width: 560px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1rem;
+      padding: 2rem 1.5rem 1.5rem;
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      box-shadow: var(--shadow);
+      text-align: center;
+    }
+    .tribute.open .tribute-card { animation: rise 0.45s ease-out both; }
+
+    .tribute-sprig { color: var(--olive); width: 38px; height: 42px; display: block; }
+    .tribute-caption {
+      font-family: "Fraunces", Georgia, serif;
+      font-weight: 500;
+      font-size: clamp(1.4rem, 5vw, 1.8rem);
+      letter-spacing: -0.01em;
+    }
+
+    .tribute-media {
+      position: relative;
+      width: 100%;
+      border-radius: 12px;
+      overflow: hidden;
+      background: color-mix(in srgb, var(--olive) 10%, var(--bg));
+    }
+    .tribute-video { display: block; width: 100%; height: auto; }
+
+    .tribute-fallback {
+      display: none;
+      padding: 3rem 1.5rem;
+      font-size: 0.9rem;
+      line-height: 1.6;
+      color: var(--muted);
+    }
+    .tribute-fallback code {
+      font-size: 0.85em;
+      color: var(--terracotta);
+    }
+    .tribute-media.no-video .tribute-video { display: none; }
+    .tribute-media.no-video .tribute-fallback { display: block; }
+
+    .tribute-playbtn, .tribute-replaybtn {
+      position: absolute;
+      inset: 0;
+      margin: auto;
+      width: 60px;
+      height: 60px;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+      color: var(--surface);
+      background: color-mix(in srgb, var(--terracotta) 90%, #000);
+      border: none;
+      border-radius: 999px;
+      cursor: pointer;
+      transition: transform 0.18s ease;
+    }
+    .tribute-playbtn:hover, .tribute-replaybtn:hover,
+    .tribute-playbtn:focus-visible, .tribute-replaybtn:focus-visible {
+      transform: scale(1.06);
+      outline: none;
+    }
+    .tribute-media.need-play .tribute-playbtn { display: flex; }
+    .tribute-media.ended .tribute-replaybtn { display: flex; }
+    /* No clip yet: hide the play/replay affordances, just show the note. */
+    .tribute-media.no-video .tribute-playbtn,
+    .tribute-media.no-video .tribute-replaybtn { display: none; }
+
+    .tribute-close {
+      position: absolute;
+      top: 0.55rem;
+      right: 0.55rem;
+      width: 34px;
+      height: 34px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.95rem;
+      line-height: 1;
+      color: var(--muted);
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      cursor: pointer;
+      transition: color 0.18s ease, border-color 0.18s ease;
+    }
+    .tribute-close:hover, .tribute-close:focus-visible {
+      color: var(--terracotta);
+      border-color: var(--terracotta);
+      outline: none;
+    }
+
     @media (prefers-reduced-motion: reduce) {
       .name, .rule, .tagline, .social, .card,
       .mark .draw, .mark .olive-dot { animation: none; opacity: 1; transform: none; }
       .mark .draw { stroke-dashoffset: 0; }
       .card { transition: none; }
+      .tribute.open, .tribute.open .tribute-card { animation: none; }
     }
   </style>
 </head>
@@ -359,6 +474,40 @@
     </div>
   </main>
 
+  <!-- Hidden tribute for Gaelle. Triggers: type "gaelle", or tap the olive sprig 3×.
+       Drop the montage in at assets/gaelle.mp4 (see README) — until then a placeholder shows.
+       Edit the caption below to change the wording. -->
+  <div id="tribute" class="tribute" role="dialog" aria-modal="true"
+       aria-label="A tribute for Gaelle" aria-hidden="true">
+    <div class="tribute-card" tabindex="-1">
+      <button class="tribute-close" type="button" aria-label="Close">✕</button>
+
+      <svg class="tribute-sprig" viewBox="0 0 56 60" fill="none" stroke="currentColor"
+           stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M30 58 C 27 42 25 30 28 10" />
+        <path d="M28 40 C 20 37 14 39 10 46 C 17 49 24 47 28 40 Z" />
+        <path d="M28 31 C 36 28 42 30 46 37 C 39 40 32 38 28 31 Z" />
+        <path d="M28 22 C 21 20 16 22 13 28 C 19 30 25 28 28 22 Z" />
+        <circle fill="var(--olive-deep)" stroke="none" cx="25" cy="13" r="2.4" />
+        <circle fill="var(--olive-deep)" stroke="none" cx="31" cy="9" r="2.4" />
+      </svg>
+
+      <p class="tribute-caption">For Gaelle</p>
+
+      <div class="tribute-media">
+        <video class="tribute-video" playsinline preload="metadata" controls>
+          <source src="assets/gaelle.mp4" type="video/mp4" />
+        </video>
+        <p class="tribute-fallback">
+          🫒 Gaelle’s montage will play here.<br />
+          Add <code>assets/gaelle.mp4</code> and push to go live.
+        </p>
+        <button class="tribute-playbtn" type="button" aria-label="Play">▶</button>
+        <button class="tribute-replaybtn" type="button" aria-label="Replay">↺</button>
+      </div>
+    </div>
+  </div>
+
   <footer class="footer">© 2026 usfkhoury.com</footer>
 
   <script>
@@ -397,6 +546,107 @@
       // Keep chrome color / color-scheme correct when the system flips in auto mode.
       darkMq.addEventListener('change', function () {
         if ((root.getAttribute('data-theme') || 'auto') === 'auto') apply('auto');
+      });
+    })();
+  </script>
+
+  <script>
+    // Hidden video tribute for Gaelle.
+    // Two doors into the same overlay:
+    //   1. type "gaelle" anywhere   (desktop / keyboard)
+    //   2. tap the olive sprig 3×   (works on touch + desktop)
+    (function () {
+      var overlay = document.getElementById('tribute');
+      if (!overlay) return;
+
+      var card     = overlay.querySelector('.tribute-card');
+      var media    = overlay.querySelector('.tribute-media');
+      var video    = overlay.querySelector('.tribute-video');
+      var playBtn  = overlay.querySelector('.tribute-playbtn');
+      var replay   = overlay.querySelector('.tribute-replaybtn');
+      var closeBtn = overlay.querySelector('.tribute-close');
+      var sprig    = document.querySelector('.identity .mark');
+
+      var SECRET = 'gaelle';
+      var buffer = '';
+      var lastFocus = null;
+
+      function open() {
+        if (overlay.classList.contains('open')) return;
+        lastFocus = document.activeElement;
+        overlay.classList.add('open');
+        overlay.setAttribute('aria-hidden', 'false');
+        media.classList.remove('ended', 'need-play');
+        card.focus();
+        // Finishing the trigger is a user gesture, so try sound-on playback.
+        // If the browser blocks it, fall back to a visible play button.
+        try { video.currentTime = 0; } catch (e) {}
+        var p = video.play();
+        if (p && typeof p.catch === 'function') {
+          p.catch(function () {
+            if (!media.classList.contains('no-video')) media.classList.add('need-play');
+          });
+        }
+      }
+
+      function close() {
+        if (!overlay.classList.contains('open')) return;
+        overlay.classList.remove('open');
+        overlay.setAttribute('aria-hidden', 'true');
+        try { video.pause(); video.currentTime = 0; } catch (e) {}
+        media.classList.remove('need-play', 'ended');
+        if (lastFocus && lastFocus.focus) lastFocus.focus();
+      }
+
+      // --- trigger 1: typed name ---
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') { close(); return; }
+        if (e.ctrlKey || e.metaKey || e.altKey) return;
+        if (e.key && e.key.length === 1 && /[a-z]/i.test(e.key)) {
+          buffer = (buffer + e.key.toLowerCase()).slice(-SECRET.length);
+          if (buffer === SECRET) { buffer = ''; open(); }
+        }
+      });
+
+      // --- trigger 2: tap the sprig 3× quickly ---
+      if (sprig) {
+        var taps = 0, tapTimer = null;
+        sprig.addEventListener('click', function () {
+          taps++;
+          clearTimeout(tapTimer);
+          if (taps >= 3) { taps = 0; open(); return; }
+          tapTimer = setTimeout(function () { taps = 0; }, 1200);
+        });
+      }
+
+      // --- dismiss ---
+      closeBtn.addEventListener('click', close);
+      overlay.addEventListener('click', function (e) { if (e.target === overlay) close(); });
+
+      // --- playback affordances ---
+      playBtn.addEventListener('click', function () {
+        media.classList.remove('need-play');
+        video.play();
+      });
+      replay.addEventListener('click', function () {
+        media.classList.remove('ended');
+        try { video.currentTime = 0; } catch (e) {}
+        video.play();
+      });
+      video.addEventListener('ended', function () { media.classList.add('ended'); });
+
+      // No file dropped in yet → show the placeholder note, not a broken player.
+      // A failed <source> fires 'error' on the source element (not always the video),
+      // so listen on both, and re-check once the network settles.
+      function markNoVideo() {
+        media.classList.add('no-video');
+        media.classList.remove('need-play');
+      }
+      var source = video.querySelector('source');
+      if (source) source.addEventListener('error', markNoVideo);
+      video.addEventListener('error', markNoVideo);
+      window.addEventListener('load', function () {
+        if (video.networkState === HTMLMediaElement.NETWORK_NO_SOURCE) markNoVideo();
       });
     })();
   </script>
