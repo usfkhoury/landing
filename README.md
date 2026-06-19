@@ -23,7 +23,7 @@ Choice is persisted to `localStorage`. A no-flash script in `<head>` applies the
 ## Easter egg
 
 A hidden video tribute lives in the page. It opens a soft overlay when a visitor
-either **types `gaelle`** (desktop) or **taps the olive sprig 3×** (touch + desktop),
+either **types `lyubz`** (desktop) or **taps the olive sprig 3×** (touch + desktop),
 dismissed with Esc or a backdrop click. The popup matches the screen shape — a tall
 stacked card in portrait, a wide two-pane card in landscape — and loads a cut framed
 for that orientation, swapping live if the device rotates. Two self-hosted clips back
