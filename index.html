@@ -381,16 +381,21 @@
         flex-direction: row;
         align-items: center;
         gap: 1.5rem;
-        max-width: min(92vw, 960px);
+        width: fit-content;   /* hug whatever the media box resolves to */
+        max-width: 95vw;
       }
-      .tribute-head { flex: 0 0 auto; gap: 0.75rem; }
-      /* Drive the box by a height cap; width follows the aspect ratio and the card hugs it. */
+      .tribute-head { flex: 0 0 auto; gap: 0.75rem; width: clamp(150px, 20vw, 220px); }
+      /* Fit the clip: width is the smaller of the available width and (height cap ×
+         aspect ratio), so a wide landscape cut is bound by WIDTH rather than a fixed
+         height that would letterbox it. aspect-ratio then derives the height (≤ cap).
+         300px reserves room for the head column, gap, and card padding. */
       .tribute-media {
-        flex: 0 1 auto;
+        flex: 0 0 auto;
         min-width: 0;
-        height: min(calc(100dvh - 4rem), 88vh);
-        width: auto;
-        max-width: 100%;
+        aspect-ratio: var(--tribute-ar, 16 / 9);
+        width: min(calc(94vw - 300px), calc((100dvh - 7rem) * var(--tribute-ar, 1.7778)));
+        height: auto;
+        max-width: 95vw;
       }
     }
 
