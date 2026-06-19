@@ -385,15 +385,16 @@
         max-width: 95vw;
       }
       .tribute-head { flex: 0 0 auto; gap: 0.75rem; width: clamp(150px, 20vw, 220px); }
-      /* Fit the clip: width is the smaller of the available width and (height cap ×
-         aspect ratio), so a wide landscape cut is bound by WIDTH rather than a fixed
-         height that would letterbox it. aspect-ratio then derives the height (≤ cap).
-         300px reserves room for the head column, gap, and card padding. */
+      /* Fit the clip: width is the smallest of an absolute ceiling, the available
+         width, and (height cap × aspect ratio), so a wide landscape cut is bound by
+         WIDTH rather than a fixed height that would letterbox it. aspect-ratio then
+         derives the height. The 700px ceiling keeps the popup a comfortable modal size
+         on large screens; 260px reserves room for the head column, gap, and padding. */
       .tribute-media {
         flex: 0 0 auto;
         min-width: 0;
         aspect-ratio: var(--tribute-ar, 16 / 9);
-        width: min(calc(94vw - 300px), calc((100dvh - 7rem) * var(--tribute-ar, 1.7778)));
+        width: min(700px, calc(70vw - 260px), calc(64dvh * var(--tribute-ar, 1.7778)));
         height: auto;
         max-width: 95vw;
       }
